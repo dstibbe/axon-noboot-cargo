@@ -29,6 +29,8 @@
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.25</slf4j.version>
     <logback.version>1.2.3</logback.version>
+    <spring.data.jpa.version>1.11.9.RELEASE</spring.data.jpa.version>
+    <hibernate.core.version>5.2.17.Final</hibernate.core.version>
   </properties>
 
   <dependencies>
@@ -66,6 +68,17 @@
       <artifactId>spring-core</artifactId>
       <version>${spring.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>${spring.data.jpa.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.core.version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.axonframework</groupId>
