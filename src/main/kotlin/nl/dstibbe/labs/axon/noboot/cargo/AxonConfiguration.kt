@@ -46,12 +46,6 @@ class AxonConfiguration {
             .storageEngine(eventStorageEngine)
             .build()
 
-    @Bean
-    fun aggregateRepo(eventStore: EventStore): Repository<Cargo> =
-            CachingEventSourcingRepository.builder(Cargo::class.java)
-                    .eventStore(eventStore)
-                    .build()
-
 
     @Bean
     fun axonConfig(commandBus: CommandBus, eventStore: EventStore): org.axonframework.config.Configuration {
