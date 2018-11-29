@@ -1,0 +1,51 @@
+<configuration scan="true" scanPeriod="60 seconds">
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+      <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+        <marker>EVENT</marker>
+        <marker>COMMAND</marker>
+      </evaluator>
+      <OnMismatch>NEUTRAL</OnMismatch>
+      <OnMatch>DENY</OnMatch>
+    </filter>
+    <encoder>
+      <pattern>%d{ISO8601} %green([%thread]) %highlight(%level) %cyan(%logger{36}) %boldBlue(-) %black(%msg%n)</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="EVENTS" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+      <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+        <marker>EVENT</marker>
+      </evaluator>
+      <OnMismatch>DENY</OnMismatch>
+      <OnMatch>NEUTRAL</OnMatch>
+    </filter>
+    <encoder>
+      <pattern>%boldBlue(%msg%n)</pattern>
+    </encoder>
+  </appender>
+
+
+  <appender name="COMMANDS" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+      <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+        <marker>COMMAND</marker>
+      </evaluator>
+      <OnMismatch>DENY</OnMismatch>
+      <OnMatch>NEUTRAL</OnMatch>
+    </filter>
+    <encoder>
+      <pattern>%boldMagenta(%msg%n)</pattern>
+    </encoder>
+  </appender>
+
+
+
+  <root level="info">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="EVENTS"/>
+    <appender-ref ref="COMMANDS"/>
+  </root>
+</configuration>
