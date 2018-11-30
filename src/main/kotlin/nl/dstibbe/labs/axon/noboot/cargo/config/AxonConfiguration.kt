@@ -2,6 +2,7 @@ package nl.dstibbe.labs.axon.noboot.cargo.config
 
 import nl.dstibbe.labs.axon.noboot.cargo.Logger
 import nl.dstibbe.labs.axon.noboot.cargo.aggregates.Cargo
+import nl.dstibbe.labs.axon.noboot.cargo.interceptors.CargoCommandInterceptor
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
@@ -31,10 +32,19 @@ class AxonConfiguration {
 
 
     @Bean
-    fun commandBus(txManager: SpringTransactionManager) =
+    fun commandInterceptor() = CargoCommandInterceptor()
+
+    @Bean
+    fun commandBus(
+            txManager: SpringTransactionManager,
+            commandInterceptor: CargoCommandInterceptor
+    ) =
             SimpleCommandBus.builder()
                     .transactionManager(txManager)
                     .build()
+                    .apply {
+                        registerDispatchInterceptor(commandInterceptor)
+                    }
 
 
     @Bean
