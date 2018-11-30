@@ -1,32 +1,39 @@
-package nl.dstibbe.labs.axon.noboot.cargo
+package nl.dstibbe.labs.axon.noboot.cargo.config
 
+import nl.dstibbe.labs.axon.noboot.cargo.Logger
 import nl.dstibbe.labs.axon.noboot.cargo.aggregates.Cargo
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.config.DefaultConfigurer
-import org.axonframework.eventsourcing.CachingEventSourcingRepository
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine
 import org.axonframework.eventsourcing.eventstore.EventStore
-import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
-import org.axonframework.modelling.command.Repository
+import org.axonframework.eventsourcing.eventstore.jpa.JpaEventStorageEngine
+import org.axonframework.spring.messaging.unitofwork.SpringTransactionManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration
 @ComponentScan
 class AxonConfiguration {
-    companion object:Logger()
+    companion object : Logger()
 
-    init{
+    init {
         log.info("Loading Axon Configuration")
     }
 
     @Bean
-    fun commandBus() =
+    fun axonTxManager(transactionManager: PlatformTransactionManager) =
+            SpringTransactionManager(transactionManager)
+
+
+    @Bean
+    fun commandBus(txManager: SpringTransactionManager) =
             SimpleCommandBus.builder()
+                    .transactionManager(txManager)
                     .build()
 
 
@@ -38,7 +45,13 @@ class AxonConfiguration {
 
 
     @Bean
-    fun eventStorageEngine() = InMemoryEventStorageEngine()
+    fun eventStorageEngine(
+            entityManagerProvider: JpaEntityManagerProvider,
+            txManager: SpringTransactionManager
+    ) = JpaEventStorageEngine.builder()
+            .transactionManager(txManager)
+            .entityManagerProvider(entityManagerProvider)
+            .build()
 
 
     @Bean

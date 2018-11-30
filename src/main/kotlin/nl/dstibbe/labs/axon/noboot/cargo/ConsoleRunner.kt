@@ -8,6 +8,7 @@ import nl.dstibbe.labs.axon.noboot.cargo.ids.Location
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import javax.transaction.Transactional
 
 @Component
 class ConsoleRunner {
@@ -16,7 +17,7 @@ class ConsoleRunner {
     @Autowired
     lateinit var commandGateway: CommandGateway
 
-
+    @Transactional
     fun run() {
         val targetId = CargoId("Hello World")
 

@@ -1,5 +1,6 @@
 package nl.dstibbe.labs.axon.noboot.cargo
 
+import nl.dstibbe.labs.axon.noboot.cargo.config.AppConfig
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
