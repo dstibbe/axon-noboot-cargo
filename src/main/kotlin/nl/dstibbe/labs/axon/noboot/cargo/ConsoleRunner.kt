@@ -21,7 +21,7 @@ class ConsoleRunner {
     fun run() {
         try {
             runAxon()
-        }catch(e:Exception){
+        } catch (e: Exception) {
             log.error("something went wrong", e)
         }
     }

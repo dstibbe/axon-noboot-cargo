@@ -5,8 +5,6 @@ import org.apache.commons.dbcp2.BasicDataSource
 import org.hibernate.cfg.Environment
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactoryBean
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
@@ -49,8 +47,6 @@ class DbConfiguration {
                 jpaVendorAdapter = HibernateJpaVendorAdapter()
                 persistenceUnitName = "events"
             }
-
-
 
 
 }

@@ -10,9 +10,9 @@ fun main() {
     val context = AnnotationConfigApplicationContext(AppConfig::class.java)
 
     try {
-        val runner= context.getBean("consoleRunner") as ConsoleRunner
+        val runner = context.getBean("consoleRunner") as ConsoleRunner
         runner.run()
-    }catch(e:NoSuchBeanDefinitionException){
+    } catch (e: NoSuchBeanDefinitionException) {
         println("Failed to load console runner")
     }
 }

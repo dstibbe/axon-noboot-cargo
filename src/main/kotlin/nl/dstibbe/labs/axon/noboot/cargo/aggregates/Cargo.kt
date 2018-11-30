@@ -11,7 +11,6 @@ import org.axonframework.eventhandling.EventHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
-import java.lang.IllegalStateException
 
 @Aggregate
 class Cargo() {
