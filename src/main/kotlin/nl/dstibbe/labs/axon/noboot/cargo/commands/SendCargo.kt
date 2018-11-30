@@ -5,5 +5,5 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 data class SendCargo(
         @TargetAggregateIdentifier
-        val id: CargoId
-)
+        override val id: CargoId
+): CargoCommand

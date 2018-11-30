@@ -7,10 +7,12 @@ import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
 import org.axonframework.config.DefaultConfigurer
+import org.axonframework.eventsourcing.CachingEventSourcingRepository
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine
 import org.axonframework.eventsourcing.eventstore.EventStore
 import org.axonframework.eventsourcing.eventstore.jpa.JpaEventStorageEngine
+import org.axonframework.modelling.command.Repository
 import org.axonframework.spring.messaging.unitofwork.SpringTransactionManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -30,9 +32,28 @@ class AxonConfiguration {
     fun axonTxManager(transactionManager: PlatformTransactionManager) =
             SpringTransactionManager(transactionManager)
 
+    @Bean
+    fun eventStorageEngine(
+            entityManagerProvider: JpaEntityManagerProvider,
+            txManager: SpringTransactionManager
+    ) = JpaEventStorageEngine.builder()
+            .transactionManager(txManager)
+            .entityManagerProvider(entityManagerProvider)
+            .build()
 
     @Bean
-    fun commandInterceptor() = CargoCommandInterceptor()
+    fun eventStore(eventStorageEngine: EventStorageEngine) = EmbeddedEventStore.builder()
+            .storageEngine(eventStorageEngine)
+            .build()
+
+    @Bean
+    fun aggregateRepo(eventStore: EventStore): Repository<Cargo> =
+            CachingEventSourcingRepository.builder(Cargo::class.java)
+                    .eventStore(eventStore)
+                    .build()
+
+    @Bean
+    fun commandInterceptor(aggregateRepo:Repository<Cargo>) = CargoCommandInterceptor(aggregateRepo)
 
     @Bean
     fun commandBus(
@@ -52,22 +73,6 @@ class AxonConfiguration {
             DefaultCommandGateway.builder()
                     .commandBus(commandBus)
                     .build()
-
-
-    @Bean
-    fun eventStorageEngine(
-            entityManagerProvider: JpaEntityManagerProvider,
-            txManager: SpringTransactionManager
-    ) = JpaEventStorageEngine.builder()
-            .transactionManager(txManager)
-            .entityManagerProvider(entityManagerProvider)
-            .build()
-
-
-    @Bean
-    fun eventStore(eventStorageEngine: EventStorageEngine) = EmbeddedEventStore.builder()
-            .storageEngine(eventStorageEngine)
-            .build()
 
 
     @Bean

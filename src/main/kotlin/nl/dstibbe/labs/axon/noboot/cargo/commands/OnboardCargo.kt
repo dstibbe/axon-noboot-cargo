@@ -7,7 +7,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 data class OnboardCargo(
         @TargetAggregateIdentifier
-        val id: CargoId,
+        override val id: CargoId,
         val carrier: CarrierId,
         val location: Location
-)
+): CargoCommand
