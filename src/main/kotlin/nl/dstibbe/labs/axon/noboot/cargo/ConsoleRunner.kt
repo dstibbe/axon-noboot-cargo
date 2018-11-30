@@ -19,6 +19,14 @@ class ConsoleRunner {
 
     @Transactional
     fun run() {
+        try {
+            runAxon()
+        }catch(e:Exception){
+            log.error("something went wrong", e)
+        }
+    }
+
+    private fun runAxon() {
         val targetId = CargoId("Hello World")
 
 

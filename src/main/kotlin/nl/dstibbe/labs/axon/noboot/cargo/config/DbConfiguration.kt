@@ -1,6 +1,7 @@
 package nl.dstibbe.labs.axon.noboot.cargo.config
 
 
+import org.apache.commons.dbcp2.BasicDataSource
 import org.hibernate.cfg.Environment
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,11 +16,20 @@ import javax.persistence.EntityManagerFactory
 import javax.sql.DataSource
 
 @Configuration
-class HsqldbConfiguration {
+class DbConfiguration {
+
+    private fun emProperties() = Properties().apply {
+        setProperty(Environment.HBM2DDL_AUTO, "drop-and-create")
+//        setProperty(Environment.HBM2DDL_AUTO, "update")
+        setProperty(Environment.DIALECT, "org.hibernate.dialect.H2Dialect")
+    }
 
     @Bean
-    fun dataSource() = EmbeddedDatabaseFactoryBean().apply {
-        setDatabaseType(EmbeddedDatabaseType.HSQL)
+    fun h2DataSource() = BasicDataSource().apply {
+        username = "sa"
+        password = ""
+        url = "jdbc:h2:file:./target/db/eventsdb;FILE_LOCK=NO"
+        driverClassName = "org.h2.Driver"
     }
 
     @Bean
@@ -41,10 +51,6 @@ class HsqldbConfiguration {
             }
 
 
-    fun emProperties() = Properties().apply {
-        setProperty(Environment.HBM2DDL_AUTO, "update")
-        setProperty(Environment.DIALECT, "org.hibernate.dialect.HSQLDialect")
-    }
 
 
 }

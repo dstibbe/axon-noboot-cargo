@@ -9,7 +9,7 @@
   <packaging>jar</packaging>
 
   <name>cargo</name>
-  <description>Demo project for Spring Boot</description>
+  <description>Demo project for Axon without Spring Boot</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -31,6 +31,9 @@
     <logback.version>1.2.3</logback.version>
     <spring.data.jpa.version>1.11.9.RELEASE</spring.data.jpa.version>
     <hibernate.core.version>5.2.17.Final</hibernate.core.version>
+    <h2.version>1.4.197</h2.version>
+    <dbcp2.version>2.4.0</dbcp2.version>
+    <xom.version>1.2.5</xom.version>
   </properties>
 
   <dependencies>
@@ -79,6 +82,18 @@
       <version>${hibernate.core.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-dbcp2</artifactId>
+      <version>${dbcp2.version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.axonframework</groupId>
@@ -89,6 +104,12 @@
       <groupId>org.axonframework</groupId>
       <artifactId>axon-spring</artifactId>
       <version>${axon.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>xom</groupId>
+      <artifactId>xom</artifactId>
+      <version>${xom.version}</version>
     </dependency>
 
     <dependency>
@@ -111,12 +132,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>${hsqldb.version}</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <!-- logging -->
     <dependency>
