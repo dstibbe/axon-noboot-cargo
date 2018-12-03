@@ -3,8 +3,11 @@ package nl.dstibbe.labs.axon.noboot.cargo.interceptors
 import nl.dstibbe.labs.axon.noboot.cargo.Logger
 import nl.dstibbe.labs.axon.noboot.cargo.aggregates.Cargo
 import nl.dstibbe.labs.axon.noboot.cargo.commands.CargoCommand
+import nl.dstibbe.labs.axon.noboot.cargo.commands.ContinueCargo
+import nl.dstibbe.labs.axon.noboot.cargo.commands.SendCargo
 import nl.dstibbe.labs.axon.noboot.cargo.ids.CargoId
 import org.axonframework.commandhandling.CommandMessage
+import org.axonframework.commandhandling.GenericCommandMessage
 import org.axonframework.messaging.MessageDispatchInterceptor
 import org.axonframework.messaging.unitofwork.DefaultUnitOfWork
 import org.axonframework.modelling.command.Aggregate
@@ -21,21 +24,17 @@ class CargoCommandInterceptor(private val aggregateRepo: Repository<Cargo>) : Me
                 log.info("Intercepting command {}.", command)
 
                 aggregateExists(command)
-
-                command
             }
 
-    fun aggregateExists(command: CommandMessage<*>) {
-        DefaultUnitOfWork.startAndGet(command)
-                .execute {
-                    val payload = command.payload as? CargoCommand
+    fun aggregateExists(command: CommandMessage<*>): CommandMessage<*> {
+        return DefaultUnitOfWork.startAndGet(command)
+                .executeWithResult {
+                    val payload = command.payload as? SendCargo
 
                     payload?.run {
-                        loadAggregate(id)?.apply {
-                            log.info("aggregate exists")
-                        } ?: log.info("aggregate does not yet exist")
-                    }
-                }
+                        loadAggregate(id)?.let { command(ContinueCargo(id)) } ?: command
+                    } ?: command
+                }.payload
     }
 
     fun loadAggregate(id: CargoId): Aggregate<Cargo>? {
@@ -49,4 +48,6 @@ class CargoCommandInterceptor(private val aggregateRepo: Repository<Cargo>) : Me
         }
         return null
     }
+
+    private fun command(command: Any): CommandMessage<Any> = GenericCommandMessage.asCommandMessage(command)
 }

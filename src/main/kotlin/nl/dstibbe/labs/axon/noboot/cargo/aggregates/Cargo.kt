@@ -1,6 +1,7 @@
 package nl.dstibbe.labs.axon.noboot.cargo.aggregates
 
 import nl.dstibbe.labs.axon.noboot.cargo.Logger
+import nl.dstibbe.labs.axon.noboot.cargo.commands.ContinueCargo
 import nl.dstibbe.labs.axon.noboot.cargo.commands.OnboardCargo
 import nl.dstibbe.labs.axon.noboot.cargo.commands.SendCargo
 import nl.dstibbe.labs.axon.noboot.cargo.events.CargoCreated
@@ -25,6 +26,11 @@ class Cargo() {
     constructor(command: SendCargo) : this() {
         log.info("[HANDLE COMMAND] SendCargo")
         AggregateLifecycle.apply(CargoCreated(command.id))
+    }
+
+    @CommandHandler
+    fun continueCargo(command: ContinueCargo) {
+        log.info("[HANDLE COMMAND] ContinueCargo --> not doing anything")
     }
 
     @CommandHandler
