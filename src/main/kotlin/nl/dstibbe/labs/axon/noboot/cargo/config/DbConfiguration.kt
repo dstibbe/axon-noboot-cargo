@@ -9,11 +9,13 @@ import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.annotation.EnableTransactionManagement
 import java.util.*
 import javax.persistence.EntityManagerFactory
 import javax.sql.DataSource
 
 @Configuration
+@EnableTransactionManagement(proxyTargetClass = true)
 class DbConfiguration {
 
     private fun emProperties() = Properties().apply {
@@ -31,9 +33,7 @@ class DbConfiguration {
     }
 
     @Bean
-    fun transactionManager(emFactory: EntityManagerFactory): PlatformTransactionManager {
-        return JpaTransactionManager(emFactory)
-    }
+    fun transactionManager(emFactory: EntityManagerFactory) = JpaTransactionManager(emFactory)
 
 
     @Bean

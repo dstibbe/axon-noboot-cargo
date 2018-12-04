@@ -53,7 +53,7 @@ class AxonConfiguration {
                     .build()
 
     @Bean
-    fun commandInterceptor(aggregateRepo:Repository<Cargo>) = CargoCommandInterceptor(aggregateRepo)
+    fun commandInterceptor(aggregateRepo: Repository<Cargo>) = CargoCommandInterceptor(aggregateRepo)
 
     @Bean
     fun commandBus(
@@ -81,8 +81,8 @@ class AxonConfiguration {
         val configurer = DefaultConfigurer.defaultConfiguration()
         configurer.configureAggregate(Cargo::class.java)
 
-        configurer.configureCommandBus { c -> commandBus }
-        configurer.configureEventStore { c -> eventStore }
+        configurer.configureCommandBus { commandBus }
+        configurer.configureEventStore { eventStore }
         val configuration = configurer
                 .buildConfiguration()
 
