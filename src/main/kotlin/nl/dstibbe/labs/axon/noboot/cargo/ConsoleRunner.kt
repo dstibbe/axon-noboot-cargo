@@ -35,5 +35,7 @@ class ConsoleRunner {
 
         log.info("[SEND COMMAND] OnboardCargo")
         commandGateway.sendAndWait<Unit>(OnboardCargo(targetId, CarrierId("Schuitje"), Location.NEW_YORK))
+
+        log.info("done")
     }
 }

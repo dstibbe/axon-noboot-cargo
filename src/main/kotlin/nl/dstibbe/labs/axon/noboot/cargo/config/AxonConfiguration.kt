@@ -2,6 +2,7 @@ package nl.dstibbe.labs.axon.noboot.cargo.config
 
 import nl.dstibbe.labs.axon.noboot.cargo.Logger
 import nl.dstibbe.labs.axon.noboot.cargo.aggregates.Cargo
+import nl.dstibbe.labs.axon.noboot.cargo.projector.Projector
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.SimpleCommandBus
 import org.axonframework.commandhandling.gateway.DefaultCommandGateway
@@ -61,13 +62,21 @@ class AxonConfiguration {
 
 
     @Bean
-    fun axonConfig(commandBus: CommandBus, eventStore: EventStore): org.axonframework.config.Configuration {
+    fun axonConfig(commandBus: CommandBus, eventStore: EventStore, projector: Projector): org.axonframework.config.Configuration {
 
         val configurer = DefaultConfigurer.defaultConfiguration()
         configurer.configureAggregate(Cargo::class.java)
 
-        configurer.configureCommandBus { c -> commandBus }
-        configurer.configureEventStore { c -> eventStore }
+        configurer.configureCommandBus { commandBus }
+        configurer.configureEventStore { eventStore }
+
+        configurer.eventProcessing { ec ->
+            // Enable this to change the event handler from tracking to subscribing
+//            ec.usingSubscribingEventProcessors()
+            ec.registerEventHandler { projector }
+
+        }
+
         val configuration = configurer
                 .buildConfiguration()
 
